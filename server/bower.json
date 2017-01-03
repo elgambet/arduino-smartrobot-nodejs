@@ -1,0 +1,23 @@
+{
+  "name": "arduino-bluetooth-controller",
+  "main": "public/js/index.js",
+  "version": "0.0.1",
+  "authors": [
+    "Pablo Gambetta <gambeita@gmail.com>"
+  ],
+  "description": "arduino elegoo smart robot kit 1.0 bluetooth controller",
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.7"
+  }
+}

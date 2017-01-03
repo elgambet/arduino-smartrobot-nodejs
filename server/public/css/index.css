@@ -1,0 +1,25 @@
+.intro-header {
+  margin-top: 50px;
+}
+
+.terminal{
+  margin-top: 50px;
+  min-width: 500px;
+  width: 85%;
+  background-color: black;
+  color: white;
+  height: 350px;
+  margin-right: auto;
+  margin-left: auto;
+  border-radius: 4px;
+  font-size: 12px;
+  font-style: italic;
+  overflow-y: scroll;
+}
+
+.console-title{
+  min-width: 500px;
+  width: 85%;
+  margin-right: auto;
+  margin-left: auto;
+}
