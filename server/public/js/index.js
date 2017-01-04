@@ -25,6 +25,14 @@ var commands = function(){
         command = 'r'; // right
         command_string = 'Right (r)';
         break;
+      case 'q':
+        command = 'L'; // left eyes
+        command_string = 'Left eyes (L)';
+        break;
+      case 'w':
+        command = 'R'; // right eyes
+        command_string = 'Right eyes (R)';
+        break;
       default:
         command = 's'; // stop
         command_string = 'Stop (s)';
@@ -104,9 +112,25 @@ var main = function(){
       $( ".console-messages" ).prepend( '<p>Bluetooth closed</p>' );
       self.offline();
     });
-    socket.on('bluetooth_data', function(msg){
-      $( ".console-messages" ).prepend( '<p>Message from car: ' + msg + '</p>' );-
-      $( ".last-message" ).text( msg );
+    socket.on('command', function(msg){
+      $( ".console-messages" ).prepend( '<p>Command from car: ' + msg + '</p>' );-
+      $( ".last-command" ).text( msg );
+    });
+    socket.on('speed', function(msg){
+      $( ".console-messages" ).prepend( '<p>Speed from car: ' + msg + '</p>' );-
+      $( ".last-speed" ).text( msg );
+    });
+    socket.on('front_distance', function(msg){
+      $( ".console-messages" ).prepend( '<p>Front distance from car: ' + msg + '</p>' );-
+      $( ".last-front-distance" ).text( msg );
+    });
+    socket.on('right_distance', function(msg){
+      $( ".console-messages" ).prepend( '<p>Right distance from car: ' + msg + '</p>' );-
+      $( ".last-right-distance" ).text( msg );
+    });
+    socket.on('left_distance', function(msg){
+      $( ".console-messages" ).prepend( '<p>Left distance from car: ' + msg + '</p>' );-
+      $( ".last-left-distance" ).text( msg );
     });
     // Send command to car
     $(document).keydown(function(e){

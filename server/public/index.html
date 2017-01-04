@@ -40,13 +40,27 @@
             <h3 id="searching" style="display: none; color: yellow">Bluetooth status, searching...</h3>
             <h3 id="found" style="display: none; color: green">Bluetooth status, found...</h3>
             <hr class="intro-divider">
+            <div class="form-inline">
+              <div class="form-group">
+                <label>Left</label>
+                <input type="number" class="last-left-distance" value="0" disabled>
+              </div>
+              <div class="form-group">
+                <label>Front</label>
+                <input type="number" class="last-front-distance" value="0" disabled>
+              </div>
+              <div class="form-group">
+                <label>Right</label>
+                <input type="number" class="last-right-distance" value="0" disabled>
+              </div>
+            </div>
             <div class="form-group">
-              <label>Last command:</label>
+              <label>Last command from car:</label>
               <span class="form-control last-command">None</span>
             </div>
             <div class="form-group">
-              <label>Last message from car:</label>
-              <span class="form-control last-message">None</span>
+              <label>Last speed from car:</label>
+              <span class="form-control last-speed">None</span>
             </div>
             <div class="form-group">
               <label>Speed:</label>
