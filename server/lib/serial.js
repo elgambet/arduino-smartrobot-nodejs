@@ -47,14 +47,12 @@ var serial = function(io){
     var init = self.received.indexOf(init);
     var end = self.received.indexOf(end);
     if(  init >= 0 &&  end >= 0 ){
-      self.received = '';
-      return self.received.substring(init + 1, end - 1);
+      return self.received.substring(init + 3, end);
     }
     return false;
   };
 
   this.checkInput = function(){
-    console.log(self.received);
     var return_data = false;
     var text = '';
     var index = self.commands.findIndex(function(command){
@@ -63,23 +61,40 @@ var serial = function(io){
     });
     if( index >= 0 ){
       self.received = '';
+      console.log(self.received);
       return {type: 'command', text: self.received};
     }
     if( self.received.length >= 7){
       // Check for front distance
       text = self.checkInitEndString('_fi', 'fe_');
-      if( text ) return {type: 'front_distance', text: text};
+      if( text ) {
+        self.received = '';
+        console.log('FRONT: ' + text);
+        return {type: 'front_distance', text: text};
+      }
       // Check for left distance
       text = self.checkInitEndString('_li', 'le_');
-      if( text ) return {type: 'left_distance', text: text};
+      if( text ) {
+        self.received = '';
+        console.log('LEFT: ' + text);
+        return {type: 'left_distance', text: text};
+      }
       // Check for right distance
       text = self.checkInitEndString('_ri', 're_');
-      if( text ) return {type: 'right_distance', text: text};
+      if( text ) {
+        self.received = '';
+        console.log('RIGHT: ' + text);
+        return {type: 'right_distance', text: text};
+      }
     }
     if( self.received.length >= 9){
       // Check for speed
       text = self.checkInitEndString('Speed: ', '.');
-      if( text ) return {type: 'speed', text: text};
+      if( text ) {
+        self.received = '';
+        console.log(text);
+        return {type: 'speed', text: text};
+      }
     }
     if(self.received.length >= 255){
       self.received = '';

@@ -4,10 +4,35 @@ var commands = function(){
   var self = this;
 
   this.lastcommand = '';
+  this.lasteye = 'R';
+
+  this.sendSpeed = function(){
+    var speed = $( "#last-speed" ).val();
+    socket.emit('speed', speed);
+    var speed_text = '';
+    if(speed == 'F') speed_text = 'Fast';
+    else if(speed == 'N') speed_text = 'Normal';
+    else if(speed == 'S') speed_text = 'Slow';
+    $( ".console-messages" ).prepend( '<p>Change speed: ' + speed + '</p>' );
+    $( ".last-command" ).text( 'Change speed: ' + speed );
+  };
+
+  this.setSpeed = function(add){
+    var speed = $( "#last-speed" ).val();
+    if(add){
+      if(speed == 'N') $( "#last-speed" ).val('F');
+      else if(speed == 'S') $( "#last-speed" ).val('N');
+    } else {
+      if(speed == 'F') $( "#last-speed" ).val('N');
+      else if(speed == 'N') $( "#last-speed" ).val('S');
+    }
+    self.sendSpeed();
+  };
 
   this.send = function(key){
     var command = false;
     var command_string = '';
+    $( ".last-front-distance-container" ).removeClass('border-color-warning');
     switch (key) {
       case 40:
         command = 'b'; // down
@@ -25,13 +50,22 @@ var commands = function(){
         command = 'r'; // right
         command_string = 'Right (r)';
         break;
-      case 'q':
-        command = 'L'; // left eyes
-        command_string = 'Left eyes (L)';
+      case 32:
+        if(self.lasteye == 'R'){
+          self.lasteye = 'L';
+          command = 'L'; // left eyes
+          command_string = 'Left eyes (L)';
+        } else {
+          self.lasteye = 'R';
+          command = 'R'; // right eyes
+          command_string = 'Right eyes (R)';  
+        }
         break;
-      case 'w':
-        command = 'R'; // right eyes
-        command_string = 'Right eyes (R)';
+      case 107:
+        self.setSpeed(true);
+        break;
+      case 109:
+        self.setSpeed();
         break;
       default:
         command = 's'; // stop
@@ -39,7 +73,7 @@ var commands = function(){
         break;
     }
     // Send command to arduino
-    if(command != self.lastcommand){
+    if(command && command != self.lastcommand){
       self.lastcommand = command;
       socket.emit('command', command);
       $( ".console-messages" ).prepend( '<p>Sending command: ' + command_string + '</p>' );
@@ -98,7 +132,7 @@ var main = function(){
     });
     socket.on('bluetooth_found', function(msg){
       $( ".console-messages" ).prepend( '<p>' + msg + '</p>' );
-      self.found();
+      //self.found();
     });
     socket.on('bluetooth_connected', function(msg){
       $( ".console-messages" ).prepend( '<p>Bluetooth connected</p>' );
@@ -113,8 +147,10 @@ var main = function(){
       self.offline();
     });
     socket.on('command', function(msg){
-      $( ".console-messages" ).prepend( '<p>Command from car: ' + msg + '</p>' );-
-      $( ".last-command" ).text( msg );
+      if(msg.trim() !== ''){
+        $( ".console-messages" ).prepend( '<p>Command from car: ' + msg + '</p>' );-
+        $( ".last-command" ).text( msg );
+      }
     });
     socket.on('speed', function(msg){
       $( ".console-messages" ).prepend( '<p>Speed from car: ' + msg + '</p>' );-
@@ -123,6 +159,7 @@ var main = function(){
     socket.on('front_distance', function(msg){
       $( ".console-messages" ).prepend( '<p>Front distance from car: ' + msg + '</p>' );-
       $( ".last-front-distance" ).text( msg );
+      $( ".last-front-distance-container" ).addClass('border-color-warning');
     });
     socket.on('right_distance', function(msg){
       $( ".console-messages" ).prepend( '<p>Right distance from car: ' + msg + '</p>' );-
@@ -130,11 +167,11 @@ var main = function(){
     });
     socket.on('left_distance', function(msg){
       $( ".console-messages" ).prepend( '<p>Left distance from car: ' + msg + '</p>' );-
-      $( ".last-left-distance" ).text( msg );
+      $( ".last-lefft-distance" ).text( msg );
     });
     // Send command to car
     $(document).keydown(function(e){
-      self.commands.send(e.keyCode);
+      self.commands.send(e.which);
     });
     // Stop car
     $(document).keyup(function(e){
@@ -144,14 +181,7 @@ var main = function(){
       $( '.terminal' ).toggle();
     });
     $( "#last-speed" ).change(function() {
-      var speed = $( "#last-speed" ).val();
-      socket.emit('speed', speed);
-      var speed_text = '';
-      if(speed == 'F') speed_text = 'Fast';
-      else if(speed == 'N') speed_text = 'Normal';
-      else if(speed == 'S') speed_text = 'Slow';
-      $( ".console-messages" ).prepend( '<p>Change speed: ' + speed + '</p>' );
-      $( ".last-command" ).text( 'Change speed: ' + speed );
+      self.sendSpeed();
     });
   }
 };
