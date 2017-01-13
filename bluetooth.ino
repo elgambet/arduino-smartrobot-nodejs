@@ -21,13 +21,13 @@ int LED = 13;
 volatile int state = LOW;
 char getstr;
 
-int distance = 0;
+int distance      = 0;
 int rightDistance = 0;
-int leftDistance = 0;
-const int front = 0;
-const int right = 1;
-const int left = 2;
-bool drive_front = false;
+int leftDistance  = 0;
+const int front   = 0;
+const int right   = 1;
+const int left    = 2;
+bool drive_front  = false;
 
 int mindistance_stop = 40;
 
@@ -102,65 +102,53 @@ bool collide()
 void receive_command()
 {
   getstr = Serial.read();
-  if (getstr == 'f')
-  {
-    drive_front = true;
-  }
-  else if (getstr == 'b')
-  {
-    drive_front = false;
-    drivelib.backward();
-  }
-  else if (getstr == 'l')
-  {
-    drive_front = false;
-    drivelib.left(false);
-  }
-  else if (getstr == 'r')
-  {
-    drive_front = false;
-    drivelib.right(false);
-  }
-  else if (getstr == 's')
-  {
-    drive_front = false;
-    drivelib.stop(false);
-  }
-  else if (getstr == 'A')
-  {
-    stateChange();
-  }
-  else if (getstr == 'F')
-  {
-    drivelib.speed(255);
-  }
-  else if (getstr == 'N')
-  {
-    drivelib.speed(127);
-  }
-  else if (getstr == 'S')
-  {
-    drivelib.speed(80);
-  }
-  else if (getstr == 'L')
-  {
-    get_right_distance();
-  }
-  else if (getstr == 'R')
-  {
-    get_left_distance();
-  }
-  else if (getstr == '1')
-  {
-    mindistance_stop = 20;
-  }
-  else if (getstr == '2')
-  {
-    mindistance_stop = 40;
-  }
-  else if (getstr == '3')
-  {
-    mindistance_stop = 60;
+  switch(getstr){
+    case 'f':
+      drive_front = true;
+      break;
+    case 'b':
+      drive_front = false;
+      drivelib.backward();
+      break;
+    case 'l':
+      drive_front = false;
+      drivelib.left(false);
+      break;
+    case 'r':
+      drive_front = false;
+      drivelib.right(false);
+      break;
+    case 's':
+      drive_front = false;
+      drivelib.stop(false);
+      break;
+    case 'A':
+      stateChange();
+      break;
+    case 'F':
+      drivelib.speed(255);
+      break;
+    case 'N':
+      drivelib.speed(127);
+      break;
+    case 'S':
+      drivelib.speed(110);
+      break;
+    case 'L':
+      get_right_distance();
+      break;
+    case 'R':
+      get_left_distance();
+      break;
+    case '1':
+      mindistance_stop = 20;
+      break;
+    case '2':
+      mindistance_stop = 40;
+      break;
+    case '3':
+      mindistance_stop = 60;
+      break;
   }
 }
 
